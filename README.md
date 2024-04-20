@@ -1,15 +1,13 @@
 # Project2 Cookbook
 
-## TRELLO for userstory
+## Links
 
-- userstory --> must serve a purpose / solve problem
-- plan , current/mvp, completed.
-
-## create git repo
-
-edit readme.md
+UserStory: https://trello.com/invite/b/YTyXgWkq/ATTIb3c653ec5532a6e86f2b4c56c3fe53ac726E9FDA/ga-project2
+Vercel:
 
 ## Deploy and test airtable and api spoonacular in VERCEL
+
+- link.
 
 _READ from API spoonacular only._
 
@@ -23,25 +21,44 @@ _CREATE/UPDATE/DELETE using Airtable._
 - add new receipe / update receipt
 - delete from favourite / own recipes.
 
-**components**
+- SPOONACULAR API
+- for the fetch recipes: check the json format
+- need to be object {id: , title:, summary: , [ {number: }, {step: }, imgurl, score??]}
+- need to limit API calls
+
+  - use state to store the input and onclick to run the search.
+  - useEffect only activates when button clicked rather than when input is keyed.
+
+- then POST to favourite
+- post the above state object + source (online)??
+- CREATE new recipe (get inputs via a form)
+- EDIT recipe (PUT/PATCH) via same form?
+- 2 buttons, update or create. check if (reset this idx, dont use the previous id from the fetch) idx === , or name w validation (use regular - expression)
+
+## WireFrame
+
+**components/pages**
 
 - APP
-- search and results
-- Favourites + Personal Recipes Page
-- Edit/Create new recipes
 
-**4 props**
+  - Search and results
+  - input bar
+  - output container for results
 
-- tastescore
+  - Favourites + Personal Recipes Page
+  - output container for favourites/personal recipes
+  - sort/filter function
 
-**2 useStates**
-this is for the fetch recipes:
-need to be object {id: , title:, summary: , [ {number: }, {step: }, imgurl, score??]
+  - Edit/Create new recipes
+  - form/fieldset for each params
+  - setState on submit
 
-then POST to favourite
-post the above state object + source (online)??
-CREATE new recipe (get inputs via a form)
-EDIT recipe (PUT/PATCH) via same form? (2 buttons, update or create. check if (reset this idx, dont use the previous id from the fetch) idx === , or name w validation (use regular expression)
+**useStates; lifting state, which is used to implement CRUD on the client side; props**
+
+- search params as a state, fetch in Search Results Page
+  - lifted to APP(main) to push to Favourites page.
+- edit recipes page
+  - lifted to APP(main) to push to Personal Page
 
 **2 react router routes**
 
@@ -49,13 +66,14 @@ EDIT recipe (PUT/PATCH) via same form? (2 buttons, update or create. check if (r
 - link to edit page
 - link to home/search page.
 
-1 lifting state, which is used to implement CRUD on the client side
-
 ## TODO
+
+what other functions to add?
 
 1. form validation
 2. put all API into env file
 3. not sure if possible, to enable upload photos.
+4. figure out why prettier. is not working properly for the jsx/html portion.
 
 ## env
 
