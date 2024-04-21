@@ -1,9 +1,11 @@
 # Project2 Cookbook
 
+Whats for Dinner?!!?!?!!?!!?!
+
 ## Links
 
 UserStory: https://trello.com/invite/b/YTyXgWkq/ATTIb3c653ec5532a6e86f2b4c56c3fe53ac726E9FDA/ga-project2
-Vercel: cookbook-nom5q8zp1-zonghans-projects-5edc3094.vercel.app
+Vercel: https://cookbook-nom5q8zp1-zonghans-projects-5edc3094.vercel.app
 
 ## WireFrame
 
@@ -71,11 +73,6 @@ _AIRTABLE_
 - link to edit page
 - link to home/search page.
 
-## TODO
+## ICEBOX
 
 what other functions to add?
-
-1. form validation
-2. put all API into env file DONE. to test on vercel
-3. not sure if possible, to enable upload photos.
-4. figure out why prettier. is not working properly for the jsx/html portion.

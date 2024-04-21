@@ -4,3 +4,19 @@
   padding: 2rem;
   text-align: center;
 }
+
+.search_container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-content: flex-start;
+  border: 1px solid blue;
+  padding: 1px;
+  margin: 0px;
+}
+
+.results {
+  border: 1px solid red;
+  padding: 1px;
+  margin: 0px;
+}
