@@ -1,63 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from 'react-router-dom';
 
 const API_KEY_airtable = import.meta.env.VITE_airtable;
 const API_KEY_spoon = import.meta.env.VITE_spoon;
 
-export default function HomePage () {
+export default function HomePage ({searchResults, setSearchResults}) {
 
-	const [airTable, setAirTable] = useState([]);
-	const [spoon, setSpoon] = useState({});
 	const [search, setSearch] = useState("");
-	const [searchResults, setSearchResults] = useState([]);
-	//check if i need to replace spaces with %symbols
+	// const [searchResults, setSearchResults] = useState([]); //* lifted to App.jsx to pass to RecipePage
+	//check if i need to replace spaces with %20 charcode.
+	//setSearch(search.replace(/\s+/g, "%20")) ?????
 	
-	//TESTING AIRTABLE
-	useEffect (() => {
-	  const loadAirTable = async () => {
-		const url = 'https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%201';
-		const options = {
-		method: 'GET', 
-		headers: {
-		  "Content-Type": "application/json",
-		Authorization: `Bearer ${API_KEY_airtable}`
-	  }
-	};
-	try {
-	  const response = await fetch(url, options);
-	  const data = await response.json();
-	  console.log(data.records);
-	  setAirTable(data.records);
-	  //note there are 2 different IDs. 1 from airtable(auto). and 1 within the fieldsObject (refering to id from spoon)
-	} catch (error) {
-	  console.error(error);
-	}
-  };
-  loadAirTable();
-  }, [])
-  
-  const showAirTable = airTable.map((airtab) => {
-	return (
-	  <div key={airtab.id}>{airtab.fields.id}</div>
-	)})
-	  
-	//TESTING SPOONACULAR
-	//figure out how to position the & and ? later on search by types.
-	const loadSpoon = async () => {
-	  const url = `https://api.spoonacular.com/recipes/643011/summary?apiKey=${API_KEY_spoon}`;
-	  const options = {
-		method: 'GET', 
-		headers: {"Content-Type": "application/json"}
-	  };
-	  try {
-	  const response = await fetch(url, options);
-	  const data = await response.json();
-	  console.log(data);
-	  setSpoon(data);
-	  } catch (error) {
-	  console.error(error);
-	}
-	};
 
 	const handleChange = (e) => {
 		setSearch(e.target.value);
@@ -102,20 +55,14 @@ export default function HomePage () {
 	
 	const displaySearch = searchResults?.map((searchResult) => {
 		return (
-			<tr className="results" key={searchResult?.id}>
-				<td>
+			<div className="results" key={searchResult.id}>
 					<Link to={`/recipe/${searchResult.id}`}>
 						Title: {searchResult?.title}
 						<img src={searchResult?.image}/>
 					</Link>
-				</td>
-				{/* <td>
-					Summary: {searchResult.summary}
-				</td> */}
-			</tr>
+			</div>
 		)
 	})
-
 
 	return (
 	<>
@@ -130,15 +77,8 @@ export default function HomePage () {
 			<button onClick={handleSearch()}>Feed Me!</button>
 			<button onClick={handleRandom()}>Get Inspired</button>
 		</form>
-		<table className="search_container">{displaySearch}</table>
+		<div className="search_container">{displaySearch}</div>
 
-
-
-		{/* <div>map out all Airtable IDs: {showAirTable}</div>
-		<div>
-		  Spoonresults title: {spoon.title}
-		  <button onClick={loadSpoon}>load spoon api</button>
-		</div> */}
 	</>
 	)
 
