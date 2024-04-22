@@ -13,6 +13,7 @@ export default function RecipePage({ searchResults }) {
 	//* need to cater to new search (not stored yet) and from favourites (already stored) as well.
 	//* setup ternary so that if pressed from Homepage search, immediately load from state (with summary and instructions avail), and minimise API call.
 	//TODO setup params based on whether the fetch should be from airTable(if from favourites) or from Spoon (new); i already setup to fetch from spoon if it is not in state (i.e. refreshed)
+	//TODO currently cannot figure out how to store the recipe/instructions in airtable as obj, just obtain id as param and fetch data
 
 	useEffect(() => {
 		searchResults.length > 0 ? loadRecipeFromState() : loadRecipeFromDB();
@@ -69,6 +70,7 @@ export default function RecipePage({ searchResults }) {
 	//*POST INTO AIRTABLE.
 	//TODO figure out how to post nested objects and arrays too.
 	//TODO otherwise have to post ingredients & instructions as strings to make them editable later.
+	//TODO use ternary operator to check if it already exists in favourites. (check if id exists)
 	const addFavourite = async () => {
 		const url = "https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%201";
 		const data = {

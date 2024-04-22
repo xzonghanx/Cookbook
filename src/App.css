@@ -48,3 +48,20 @@ a:visited {
   text-align: justify;
   color: brown;
 }
+
+.favourites_container {
+  display: grid;
+  width: 1280px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-content: center;
+  border: 1px solid blue;
+  padding: 5px;
+  margin: 10px auto;
+}
+
+.favourites {
+  border: 1px solid red;
+  padding: 2px;
+  margin: 0px;
+}
