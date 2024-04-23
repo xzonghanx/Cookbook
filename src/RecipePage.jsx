@@ -14,9 +14,23 @@ export default function RecipePage({ searchResults }) {
 	const [favourited, setFavourited] = useState(null);
 
 	useEffect(() => {
-		searchResults.length > 0 ? loadRecipeFromState() : loadRecipeFromAPI();
-		// console.log("recipe", recipe);
+		const fetchData = async () => {
+			searchResults.length > 0 ? await loadRecipeFromState() : await loadRecipeFromAPI();
+			// console.log("recipe", recipe);
+		};
+		fetchData();
 	}, []);
+
+	useEffect(() => {
+		try {
+			// console.log("analyzedinstructions", recipe?.analyzedInstructions[0].steps);
+			setInstructions(recipe?.analyzedInstructions[0].steps);
+			// console.log("extendedingredients", recipe?.extendedIngredients);
+			setIngredients(recipe?.extendedIngredients);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [recipe]);
 
 	const loadRecipeFromState = async () => {
 		// console.log("loadRecipeFromState");
@@ -39,20 +53,9 @@ export default function RecipePage({ searchResults }) {
 		}
 	};
 
-	useEffect(() => {
-		try {
-			// console.log("analyzedinstructions", recipe?.analyzedInstructions[0].steps);
-			setInstructions(recipe?.analyzedInstructions[0].steps);
-			// console.log("extendedingredients", recipe?.extendedIngredients);
-			setIngredients(recipe?.extendedIngredients);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [recipe]);
-
 	//To enable innerHTML elements within .summary
 	const description = recipe?.summary;
-	function ConvertRecipe({ description }) {
+	function ConvertSummary({ description }) {
 		return <div dangerouslySetInnerHTML={{ __html: description }} />;
 	}
 
@@ -63,10 +66,6 @@ export default function RecipePage({ searchResults }) {
 	const mapIngredients = ingredients?.map((ingredient) => {
 		return <li key={ingredient.id}> {ingredient.original}</li>;
 	});
-
-	//TODO use ternary operator to check if it already exists in favourites. (check if id exists),
-	//TODO if exist, then change button to <Remove from Fav>; and load <Notes />
-	//TODO else just Add to Fav button --> and onClick --> load <Notes />
 
 	useEffect(() => {
 		const checkFavourites = async () => {
@@ -91,7 +90,7 @@ export default function RecipePage({ searchResults }) {
 			}
 		};
 		checkFavourites();
-	}, []);
+	}, [favourited]);
 
 	//CREATE AIRTABLE.
 	const addFavourite = async () => {
@@ -102,6 +101,9 @@ export default function RecipePage({ searchResults }) {
 				title: recipe.title,
 				summary: recipe.summary,
 				image: recipe.image,
+				count: 0,
+				lastCooked: null,
+				notes: "",
 			},
 		};
 		const options = {
@@ -115,6 +117,7 @@ export default function RecipePage({ searchResults }) {
 		const response = await fetch(url, options);
 		const res = response.json();
 		console.log(res);
+		setFavourited(true);
 	};
 
 	//DELETE AIRTABLE. i need Airtable's generated recordID to access just that single record
@@ -130,6 +133,7 @@ export default function RecipePage({ searchResults }) {
 		const response = await fetch(url, options);
 		const res = response.json();
 		console.log(res);
+		setFavourited(false);
 	};
 
 	return (
@@ -140,7 +144,7 @@ export default function RecipePage({ searchResults }) {
 				<li>Servings: {recipe.servings}</li>
 				<li>Ready in Minutes: {recipe.readyInMinutes}</li>
 			</ul>
-			<h2>Recipe Summary:</h2> <ConvertRecipe description={description} />
+			<h2>Recipe Summary:</h2> <ConvertSummary description={description} />
 			<br />
 			<h2>Ingredients:</h2>
 			<ul> {mapIngredients}</ul>
@@ -148,9 +152,8 @@ export default function RecipePage({ searchResults }) {
 			<ol> {mapInstructions}</ol>
 			<div>{favourited ? <button onClick={removeFavourite}>Remove from Favourites</button> : <button onClick={addFavourite}>Add to Favourites</button>}</div>
 			<button>TODO Get Similar Recipes (Link back to previous page display)</button>
-			<div className='notes_container'>
-				<Notes notesData={notesData} />
-			</div>
+			{/* https://api.spoonacular.com/recipes/{id}}/similar */}
+			<div className='notes_container'>{favourited ? <Notes notesData={notesData} setNotesData={setNotesData} /> : null}</div>
 		</div>
 	);
 }

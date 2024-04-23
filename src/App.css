@@ -73,3 +73,18 @@ a:visited {
   margin: 2px;
   background-color: aquamarine;
 }
+
+.notes_form > * {
+  display: flex;
+  border: 1px dotted blueviolet;
+  padding: 2px;
+  margin: 5px;
+  justify-content: space-around;
+  align-items: center;
+  background-color: pink;
+}
+
+.notes_input {
+  width: 200px;
+  height: 100px;
+}
