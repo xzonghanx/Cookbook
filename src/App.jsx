@@ -4,8 +4,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import HomePage from "./HomePage";
 import RecipePage from "./RecipePage";
 import FavouritesPage from "./FavouritesPage";
-import NewRecipePage from "./NewRecipePage";
-import EditPage from "./EditPage";
+// import NewRecipePage from "./NewRecipePage";
 
 function App() {
 	const [searchResults, setSearchResults] = useState([]);
@@ -28,8 +27,8 @@ function App() {
 					<Route path='/' element={<HomePage searchResults={searchResults} setSearchResults={setSearchResults} />} />
 					<Route path='/recipe/:recipeId' element={<RecipePage searchResults={searchResults} />} />
 					<Route path='/favourites' element={<FavouritesPage />} />
-					<Route path='/new' element={<NewRecipePage />} />
-					<Route path='/recipe/edit/:recipeId' element={<EditPage />} />
+					{/* <Route path='/new' element={<NewRecipePage />} /> */}
+					{/* <Route path='/recipe/notes/:recipeId' element={<Notes />} /> */}
 				</Routes>
 			</main>
 		</>

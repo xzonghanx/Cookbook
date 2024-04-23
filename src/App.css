@@ -44,7 +44,8 @@ a:visited {
 }
 
 .recipe_page {
-  padding: 0px 500px;
+  /* adjust this to fit minimised windows, use %? */
+  padding: 0px 300px; 
   text-align: justify;
   color: brown;
 }
@@ -64,4 +65,11 @@ a:visited {
   border: 1px solid red;
   padding: 2px;
   margin: 0px;
+}
+
+.notes_container {
+  border: 1px dotted green;
+  padding: 2px;
+  margin: 2px;
+  background-color: aquamarine;
 }

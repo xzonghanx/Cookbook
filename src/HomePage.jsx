@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-// const API_KEY_airtable = import.meta.env.VITE_airtable;
 const API_KEY_spoon = import.meta.env.VITE_spoon;
 
 export default function HomePage({ searchResults, setSearchResults }) {
@@ -55,7 +54,6 @@ export default function HomePage({ searchResults, setSearchResults }) {
 			<div className='results' key={searchResult.id}>
 				<Link to={`/recipe/${searchResult.id}`}>
 					Title: {searchResult?.title}
-					<button>Add to Fav</button>
 					<img src={searchResult?.image} />
 				</Link>
 			</div>

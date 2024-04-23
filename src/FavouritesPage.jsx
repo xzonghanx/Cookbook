@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 const API_KEY_airtable = import.meta.env.VITE_airtable;
 
 export default function FavouritesPage() {
@@ -34,10 +35,6 @@ export default function FavouritesPage() {
 					Title: {favourite.fields.title}
 					<img src={favourite.fields.image} />
 				</Link>
-				<p>
-					<span>Times Cooked: Count</span>
-					<span>Last Cooked: Date</span>
-				</p>
 			</div>
 		);
 	});
