@@ -39,7 +39,6 @@ export default function PsnRecipesPage() {
 		loadThisRecipe();
 	}, []);
 
-	//TODO figure out how to add/delete photos individually, or only can choose 1 photo for now.
 	const displayForm = () => {
 		return (
 			<form className='new_form' onSubmit={EditRecipe}>
@@ -59,9 +58,6 @@ export default function PsnRecipesPage() {
 					<label>
 						Notes: <textarea className='notes_input' name='notes' value={thisRecipe.notes} onChange={handleChange} />
 					</label>
-					<label>
-						Photo: <input name='photo' type='file' onChange={handleChange} />
-					</label>
 					<button>Save</button>
 				</fieldset>
 			</form>
@@ -79,7 +75,6 @@ export default function PsnRecipesPage() {
 				notes: thisRecipe.notes,
 				ingredients: thisRecipe.ingredients,
 				instructions: thisRecipe.instructions,
-				photo: thisRecipe.photo,
 			},
 		};
 		const options = {
@@ -94,7 +89,6 @@ export default function PsnRecipesPage() {
 		const response = await fetch(url, options);
 		const res = response.json();
 		console.log(res);
-		// either reset fields, or close the form.
 		handleToggle();
 	};
 
@@ -102,6 +96,8 @@ export default function PsnRecipesPage() {
 		<>
 			<div className='recipe_page'>
 				<h1>Dish Name: {thisRecipe.title}</h1>
+				<button onClick={handleToggle}> EDIT Recipe</button>
+				{toggleForm ? displayForm() : null}
 				<h2>Recipe Summary: </h2>
 				<div>{thisRecipe.summary}</div>
 				<br />
@@ -123,10 +119,7 @@ export default function PsnRecipesPage() {
 						<li key={index}>{item}</li>
 					))}
 				</ul>
-				<h2>Gallery:</h2>
 				<br />
-				<button onClick={handleToggle}> EDIT Recipe</button>
-				{toggleForm ? displayForm() : null}
 			</div>
 		</>
 	);

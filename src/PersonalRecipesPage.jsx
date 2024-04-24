@@ -19,7 +19,6 @@ export default function PersonalRecipesPage() {
 			try {
 				const response = await fetch(url, options);
 				const data = await response.json();
-				// console.log(data.records);
 				setPersonal(data.records);
 			} catch (error) {
 				console.error(error);
@@ -33,7 +32,6 @@ export default function PersonalRecipesPage() {
 			<div key={item.fields.recordID} className='favourites'>
 				<Link to={`/personal/${item.fields.recordID}`}>
 					<h2>{item.fields.title}</h2>
-					{/* <img src={item.fields.image} /> */}
 				</Link>
 			</div>
 		);

@@ -4,6 +4,8 @@ const API_KEY_airtable = import.meta.env.VITE_airtable;
 export default function NewRecipePage() {
 	const [newRecipe, setNewRecipe] = useState({});
 
+	const [imageUrl, setImageUrl] = useState(null);
+
 	const handleChange = (e) => {
 		setNewRecipe({ ...newRecipe, [e.target.name]: e.target.value });
 		console.log(e.target.value);
@@ -27,9 +29,6 @@ export default function NewRecipePage() {
 					</label>
 					<label>
 						Notes: <textarea className='notes_input' name='notes' onChange={handleChange} />
-					</label>
-					<label>
-						Photo: <input name='photo' type='file' onChange={handleChange} />
 					</label>
 					<button>Save</button>
 				</fieldset>
@@ -94,7 +93,6 @@ export default function NewRecipePage() {
 						<li key={index}>{item}</li>
 					))}
 				</ul>
-				<h2>Gallery:</h2>
 			</div>
 		</>
 	);

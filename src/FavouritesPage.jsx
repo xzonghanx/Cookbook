@@ -19,7 +19,7 @@ export default function FavouritesPage() {
 			try {
 				const response = await fetch(url, options);
 				const data = await response.json();
-				console.log(data.records);
+				// console.log(data.records);
 				setFavourites(data.records);
 			} catch (error) {
 				console.error(error);
@@ -28,13 +28,28 @@ export default function FavouritesPage() {
 		loadFavourites();
 	}, []);
 
+	const sortCount = () => {
+		let sorted = [...favourites];
+		sorted.sort((a, b) => b.fields.count - a.fields.count);
+		setFavourites(sorted);
+	};
+
+	const sortDate = () => {
+		let filteredWithDates = favourites.filter((item) => item.fields.lastCooked !== undefined);
+		let filteredWithoutDates = favourites.filter((item) => item.fields.lastCooked === undefined);
+		filteredWithDates.sort((a, b) => new Date(b.fields.lastCooked) - new Date(a.fields.lastCooked));
+		setFavourites([...filteredWithDates, ...filteredWithoutDates]);
+	};
+
 	const showFavourites = favourites?.map((favourite) => {
 		return (
 			<div key={favourite.fields.id} className='favourites'>
 				<Link to={`/recipe/${favourite.fields.id}`}>
-					Title: {favourite.fields.title}
+					<div>Title: {favourite.fields.title}</div>
 					<img src={favourite.fields.image} />
 				</Link>
+				<div>Times Cooked:{favourite.fields.count ? favourite.fields.count : "Never"}</div>
+				<div>Last Cooked:{favourite.fields.lastCooked ? new Date(favourite.fields.lastCooked).toLocaleDateString("en-SG") : "Never"} </div>
 			</div>
 		);
 	});
@@ -42,6 +57,10 @@ export default function FavouritesPage() {
 	return (
 		<>
 			<h1>Your Favourite Recipes</h1>
+			<div>
+				<button onClick={sortDate}>Sort by Date</button>
+				<button onClick={sortCount}>Sort by Times Cooked</button>
+			</div>
 			<div className='favourites_container'>{showFavourites}</div>
 		</>
 	);
