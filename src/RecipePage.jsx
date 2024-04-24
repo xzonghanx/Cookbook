@@ -151,8 +151,6 @@ export default function RecipePage({ searchResults }) {
 			<h2>Instructions:</h2>
 			<ol> {mapInstructions}</ol>
 			<div>{favourited ? <button onClick={removeFavourite}>Remove from Favourites</button> : <button onClick={addFavourite}>Add to Favourites</button>}</div>
-			<button>TODO Get Similar Recipes (Link back to previous page display)</button>
-			{/* https://api.spoonacular.com/recipes/{id}}/similar */}
 			<div className='notes_container'>{favourited ? <Notes notesData={notesData} setNotesData={setNotesData} /> : null}</div>
 		</div>
 	);

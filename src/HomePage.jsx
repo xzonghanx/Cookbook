@@ -6,7 +6,6 @@ const API_KEY_spoon = import.meta.env.VITE_spoon;
 export default function HomePage({ searchResults, setSearchResults }) {
 	const [search, setSearch] = useState("");
 	// const [searchResults, setSearchResults] = useState([]); //* lifted to App.jsx to pass to RecipePage
-	// check if i need to replace spaces with %20 charcode. setSearch(search.replace(/\s+/g, "%20")) ?????
 
 	const handleChange = (e) => {
 		setSearch(e.target.value);
@@ -15,7 +14,7 @@ export default function HomePage({ searchResults, setSearchResults }) {
 
 	const handleSearch = () => async (e) => {
 		e.preventDefault();
-		const url = `https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=10&ranking=2&addRecipeInformation=true&addRecipeInstructions=true&apiKey=${API_KEY_spoon}`;
+		const url = `https://api.spoonacular.com/recipes/complexSearch?query=${search.replace(/\s+/g, "%20")}&number=10&ranking=2&addRecipeInformation=true&addRecipeInstructions=true&apiKey=${API_KEY_spoon}`;
 		console.log("url", url);
 		const options = {
 			method: "GET",

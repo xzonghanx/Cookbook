@@ -74,7 +74,7 @@ a:visited {
   background-color: aquamarine;
 }
 
-.notes_form > * {
+.notes_form > * , .new_form > * {
   display: flex;
   border: 1px dotted blueviolet;
   padding: 2px;

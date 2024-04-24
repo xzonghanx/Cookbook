@@ -18,7 +18,7 @@ export default function Notes({ notesData, setNotesData }) {
 			<form className='notes_form' onSubmit={handlePatch}>
 				<fieldset>
 					<label>
-						Notes: <input className='notes_input' name='notes' type='text' value={inputs?.notes} onChange={handleChange} />
+						Notes: <textarea className='notes_input' name='notes' value={inputs?.notes} onChange={handleChange} />
 					</label>
 					<label>
 						Times Cooked: <input name='count' type='number' value={inputs?.count} onChange={handleChange} />
@@ -58,7 +58,6 @@ export default function Notes({ notesData, setNotesData }) {
 		const res = response.json();
 		console.log(res);
 		handleToggle();
-		//TODO testing this to activate useEffect upstream
 		setNotesData({ ...notesData, ...inputs });
 	};
 

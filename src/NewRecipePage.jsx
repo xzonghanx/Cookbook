@@ -1,35 +1,101 @@
-// import { useState } from "react";
-// const API_KEY_airtable = import.meta.env.VITE_airtable;
+import { useState } from "react";
+const API_KEY_airtable = import.meta.env.VITE_airtable;
 
 export default function NewRecipePage() {
-	// const [newRecipe, setNewRecipe] = useState({});
+	const [newRecipe, setNewRecipe] = useState({});
 
-	return <h1>New Recipe page here</h1>;
+	const handleChange = (e) => {
+		setNewRecipe({ ...newRecipe, [e.target.name]: e.target.value });
+		console.log(e.target.value);
+	};
+
+	const displayForm = () => {
+		return (
+			<form className='new_form' onSubmit={addRecipe}>
+				<fieldset>
+					<label>
+						Title: <input name='title' type='text' onChange={handleChange} />
+					</label>
+					<label>
+						Summary: <textarea className='notes_input' name='summary' onChange={handleChange} />
+					</label>
+					<label>
+						Ingredients: <textarea className='notes_input' name='ingredients' onChange={handleChange} />
+					</label>
+					<label>
+						Instructions: <textarea className='notes_input' name='instructions' onChange={handleChange} />
+					</label>
+					<label>
+						Notes: <textarea className='notes_input' name='notes' onChange={handleChange} />
+					</label>
+					<label>
+						Photo: <input name='photo' type='file' onChange={handleChange} />
+					</label>
+					<button>Save</button>
+				</fieldset>
+			</form>
+		);
+	};
+
+	// CREATE AIRTABLE.
+	const addRecipe = async (e) => {
+		e.preventDefault();
+		const url = "https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%202";
+		const data = {
+			fields: {
+				title: newRecipe.title,
+				summary: newRecipe.summary,
+				notes: newRecipe.notes,
+				ingredients: newRecipe.ingredients,
+				instructions: newRecipe.instructions,
+				photo: newRecipe.photo,
+			},
+		};
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${API_KEY_airtable}`,
+			},
+			body: JSON.stringify(data),
+		};
+		console.log(JSON.stringify(data));
+		const response = await fetch(url, options);
+		const res = response.json();
+		console.log(res);
+		setNewRecipe({}); //reset fields
+	};
+
+	return (
+		<>
+			<h1>New Recipe Preview:</h1>
+			<div>{displayForm()}</div>
+			<br />
+			<div className='recipe_page'>
+				<h1>Dish Name: {newRecipe.title}</h1>
+				<h2>Recipe Summary: </h2>
+				<div>{newRecipe.summary}</div>
+				<br />
+				<h2>Ingredients:</h2>
+				<ul>
+					{newRecipe.ingredients?.split("\n").map((item, index) => (
+						<li key={index}>{item}</li>
+					))}
+				</ul>
+				<h2>Instructions:</h2>
+				<ol>
+					{newRecipe.instructions?.split("\n").map((item, index) => (
+						<li key={index}>{item}</li>
+					))}
+				</ol>
+				<h2>Notes:</h2>
+				<ul>
+					{newRecipe.notes?.split("\n").map((item, index) => (
+						<li key={index}>{item}</li>
+					))}
+				</ul>
+				<h2>Gallery:</h2>
+			</div>
+		</>
+	);
 }
-
-//CREATE AIRTABLE.
-// const addRecipe = async () => {
-// 	const url = "https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%201";
-// 	const data = {
-// 		fields: {
-// 			id: recipe.id,
-// 			title: recipe.title,
-// 			summary: recipe.summary,
-// 			image: recipe.image,
-// 			count: count,
-//			lastCooked: date,
-//			notes: notes
-// 		},
-// 	};
-// 	const options = {
-// 		method: "POST",
-// 		headers: {
-// 			"Content-Type": "application/json",
-// 			Authorization: `Bearer ${API_KEY_airtable}`,
-// 		},
-// 		body: JSON.stringify(data),
-// 	};
-// 	const response = await fetch(url, options);
-// 	const res = response.json();
-// 	console.log(res);
-// };
