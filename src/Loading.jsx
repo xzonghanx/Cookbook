@@ -5,7 +5,7 @@ const Loading = () => {
 
 	return (
 		<div className='loading'>
-			<img src='src/ricefrying.webp' alt='loading...' onError={(error) => handleImageError(error)} />
+			<img src='../ricefrying.webp' alt='loading...' onError={(error) => handleImageError(error)} />
 		</div>
 	);
 };
