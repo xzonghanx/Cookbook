@@ -1,10 +1,10 @@
 import { useState } from "react";
+import Loading from "./Loading";
 const API_KEY_airtable = import.meta.env.VITE_airtable;
 
 export default function NewRecipePage() {
 	const [newRecipe, setNewRecipe] = useState({});
-
-	const [imageUrl, setImageUrl] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const handleChange = (e) => {
 		setNewRecipe({ ...newRecipe, [e.target.name]: e.target.value });
@@ -39,6 +39,7 @@ export default function NewRecipePage() {
 	// CREATE AIRTABLE.
 	const addRecipe = async (e) => {
 		e.preventDefault();
+		setLoading(true);
 		const url = "https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%202";
 		const data = {
 			fields: {
@@ -63,37 +64,44 @@ export default function NewRecipePage() {
 		const res = response.json();
 		console.log(res);
 		setNewRecipe({}); //reset fields
+		setLoading(false);
 	};
 
 	return (
 		<>
 			<h1>New Recipe Preview:</h1>
-			<div>{displayForm()}</div>
-			<br />
-			<div className='recipe_page'>
-				<h1>Dish Name: {newRecipe.title}</h1>
-				<h2>Recipe Summary: </h2>
-				<div>{newRecipe.summary}</div>
-				<br />
-				<h2>Ingredients:</h2>
-				<ul>
-					{newRecipe.ingredients?.split("\n").map((item, index) => (
-						<li key={index}>{item}</li>
-					))}
-				</ul>
-				<h2>Instructions:</h2>
-				<ol>
-					{newRecipe.instructions?.split("\n").map((item, index) => (
-						<li key={index}>{item}</li>
-					))}
-				</ol>
-				<h2>Notes:</h2>
-				<ul>
-					{newRecipe.notes?.split("\n").map((item, index) => (
-						<li key={index}>{item}</li>
-					))}
-				</ul>
-			</div>
+			{loading ? (
+				<Loading />
+			) : (
+				<>
+					<div>{displayForm()}</div>
+					<br />
+					<div className='recipe_page'>
+						<h1>Dish Name: {newRecipe.title}</h1>
+						<h2>Recipe Summary: </h2>
+						<div>{newRecipe.summary}</div>
+						<br />
+						<h2>Ingredients:</h2>
+						<ul>
+							{newRecipe.ingredients?.split("\n").map((item, index) => (
+								<li key={index}>{item}</li>
+							))}
+						</ul>
+						<h2>Instructions:</h2>
+						<ol>
+							{newRecipe.instructions?.split("\n").map((item, index) => (
+								<li key={index}>{item}</li>
+							))}
+						</ol>
+						<h2>Notes:</h2>
+						<ul>
+							{newRecipe.notes?.split("\n").map((item, index) => (
+								<li key={index}>{item}</li>
+							))}
+						</ul>
+					</div>
+				</>
+			)}
 		</>
 	);
 }

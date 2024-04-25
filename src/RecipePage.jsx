@@ -1,44 +1,41 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Notes from "./Notes";
+import Loading from "./Loading";
 
 const API_KEY_airtable = import.meta.env.VITE_airtable;
 const API_KEY_spoon = import.meta.env.VITE_spoon;
 
-export default function RecipePage({ searchResults }) {
+export default function RecipePage({ searchResults, fromRandom }) {
 	const { recipeId } = useParams();
 	const [recipe, setRecipe] = useState({});
 	const [instructions, setInstructions] = useState([]);
 	const [ingredients, setIngredients] = useState([]);
 	const [notesData, setNotesData] = useState({});
 	const [favourited, setFavourited] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			searchResults.length > 0 ? await loadRecipeFromState() : await loadRecipeFromAPI();
-			// console.log("recipe", recipe);
+			setLoading(true);
+			try {
+				fromRandom ? await loadRecipeFromState() : await loadRecipeFromAPI(); //save API call if from random (already has ingredients and instructions included
+				setLoading(false);
+			} catch (error) {
+				console.error(error);
+				setLoading(false);
+			}
 		};
 		fetchData();
 	}, []);
 
-	useEffect(() => {
-		try {
-			// console.log("analyzedinstructions", recipe?.analyzedInstructions[0].steps);
-			setInstructions(recipe?.analyzedInstructions[0].steps);
-			// console.log("extendedingredients", recipe?.extendedIngredients);
-			setIngredients(recipe?.extendedIngredients);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [recipe]);
-
 	const loadRecipeFromState = async () => {
-		// console.log("loadRecipeFromState");
+		console.log("loadRecipeFromState");
 		setRecipe(...searchResults.filter((result) => result.id === parseInt(recipeId)));
 	};
 
 	const loadRecipeFromAPI = async () => {
-		// console.log("loadRecipeFromAPI");
+		console.log("loadRecipeFromAPI");
 		const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY_spoon}`;
 		const options = {
 			method: "GET",
@@ -52,6 +49,15 @@ export default function RecipePage({ searchResults }) {
 			console.error(error);
 		}
 	};
+
+	useEffect(() => {
+		try {
+			setInstructions(recipe?.analyzedInstructions[0].steps);
+			setIngredients(recipe?.extendedIngredients);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [recipe]);
 
 	//To enable innerHTML elements within .summary
 	const description = recipe?.summary;
@@ -68,6 +74,7 @@ export default function RecipePage({ searchResults }) {
 	});
 
 	useEffect(() => {
+		let active = true;
 		const checkFavourites = async () => {
 			const url = "https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%201";
 			const options = {
@@ -77,20 +84,23 @@ export default function RecipePage({ searchResults }) {
 					Authorization: `Bearer ${API_KEY_airtable}`,
 				},
 			};
-			try {
-				const response = await fetch(url, options);
-				const data = await response.json();
-				const thisRecord = data.records.filter((record) => record.fields.id === parseInt(recipeId));
-				// console.log(thisRecord);
-				// console.log(thisRecord.length);
-				thisRecord.length > 0 ? setFavourited(true) : setFavourited(false);
-				setNotesData(thisRecord[0].fields);
-			} catch (error) {
-				console.error(error);
+			if (active) {
+				try {
+					const response = await fetch(url, options);
+					const data = await response.json();
+					const thisRecord = data.records.filter((record) => record.fields.id === parseInt(recipeId));
+					setFavourited(thisRecord.length > 0);
+					setNotesData(thisRecord.length > 0 ? thisRecord[0].fields : {});
+				} catch (error) {
+					console.error(error);
+				}
 			}
 		};
 		checkFavourites();
-	}, [favourited]);
+		return () => {
+			active = false;
+		};
+	}, [favourited, recipeId]);
 
 	//CREATE AIRTABLE.
 	const addFavourite = async () => {
@@ -137,21 +147,28 @@ export default function RecipePage({ searchResults }) {
 	};
 
 	return (
-		<div className='recipe_page'>
-			<h1>Dish Name: {recipe.title}</h1>
-			<img src={recipe.image} />
-			<ul>
-				<li>Servings: {recipe.servings}</li>
-				<li>Ready in Minutes: {recipe.readyInMinutes}</li>
-			</ul>
-			<h2>Recipe Summary:</h2> <ConvertSummary description={description} />
-			<br />
-			<h2>Ingredients:</h2>
-			<ul> {mapIngredients}</ul>
-			<h2>Instructions:</h2>
-			<ol> {mapInstructions}</ol>
-			<div>{favourited ? <button onClick={removeFavourite}>Remove from Favourites</button> : <button onClick={addFavourite}>Add to Favourites</button>}</div>
-			<div className='notes_container'>{favourited ? <Notes notesData={notesData} setNotesData={setNotesData} /> : null}</div>
-		</div>
+		<>
+			<h1>Recipe Details</h1>
+			{loading ? (
+				<Loading />
+			) : (
+				<div className='recipe_page'>
+					<h1>Dish Name: {recipe.title}</h1>
+					<img src={recipe.image} />
+					<ul>
+						<li>Servings: {recipe.servings}</li>
+						<li>Ready in Minutes: {recipe.readyInMinutes}</li>
+					</ul>
+					<h2>Recipe Summary:</h2> <ConvertSummary description={description} />
+					<br />
+					<h2>Ingredients:</h2>
+					<ul> {mapIngredients}</ul>
+					<h2>Instructions:</h2>
+					<ol> {mapInstructions}</ol>
+					<div>{favourited ? <button onClick={removeFavourite}>Remove from Favourites</button> : <button onClick={addFavourite}>Add to Favourites</button>}</div>
+					<div className='notes_container'>{favourited ? <Notes notesData={notesData} setNotesData={setNotesData} /> : null}</div>
+				</div>
+			)}
+		</>
 	);
 }

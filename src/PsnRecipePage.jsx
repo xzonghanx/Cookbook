@@ -1,5 +1,6 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
+import Loading from "./Loading";
 
 const API_KEY_airtable = import.meta.env.VITE_airtable;
 
@@ -7,10 +8,10 @@ export default function PsnRecipesPage() {
 	const { recordID } = useParams();
 	const [thisRecipe, setThisRecipe] = useState({});
 	const [toggleForm, setToggleForm] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleChange = (e) => {
 		setThisRecipe({ ...thisRecipe, [e.target.name]: e.target.value });
-		console.log(e.target.value);
 	};
 
 	const handleToggle = () => {
@@ -19,6 +20,7 @@ export default function PsnRecipesPage() {
 
 	useEffect(() => {
 		const loadThisRecipe = async () => {
+			setLoading(true);
 			const url = `https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%202/${recordID}`;
 			const options = {
 				method: "GET",
@@ -30,10 +32,11 @@ export default function PsnRecipesPage() {
 			try {
 				const response = await fetch(url, options);
 				const data = await response.json();
-				console.log(data.fields);
 				setThisRecipe(data.fields);
+				setLoading(false);
 			} catch (error) {
 				console.error(error);
+				setLoading(false);
 			}
 		};
 		loadThisRecipe();
@@ -94,33 +97,38 @@ export default function PsnRecipesPage() {
 
 	return (
 		<>
-			<div className='recipe_page'>
-				<h1>Dish Name: {thisRecipe.title}</h1>
-				<button onClick={handleToggle}> EDIT Recipe</button>
-				{toggleForm ? displayForm() : null}
-				<h2>Recipe Summary: </h2>
-				<div>{thisRecipe.summary}</div>
-				<br />
-				<h2>Ingredients:</h2>
-				<ul>
-					{thisRecipe.ingredients?.split("\n").map((item, index) => (
-						<li key={index}>{item}</li>
-					))}
-				</ul>
-				<h2>Instructions:</h2>
-				<ol>
-					{thisRecipe.instructions?.split("\n").map((item, index) => (
-						<li key={index}>{item}</li>
-					))}
-				</ol>
-				<h2>Notes:</h2>
-				<ul>
-					{thisRecipe.notes?.split("\n").map((item, index) => (
-						<li key={index}>{item}</li>
-					))}
-				</ul>
-				<br />
-			</div>
+			<h1>Recipe Details</h1>
+			{loading ? (
+				<Loading />
+			) : (
+				<div className='recipe_page'>
+					<h1>Dish Name: {thisRecipe.title}</h1>
+					<button onClick={handleToggle}> EDIT Recipe</button>
+					{toggleForm ? displayForm() : null}
+					<h2>Recipe Summary: </h2>
+					<div>{thisRecipe.summary}</div>
+					<br />
+					<h2>Ingredients:</h2>
+					<ul>
+						{thisRecipe.ingredients?.split("\n").map((item, index) => (
+							<li key={index}>{item}</li>
+						))}
+					</ul>
+					<h2>Instructions:</h2>
+					<ol>
+						{thisRecipe.instructions?.split("\n").map((item, index) => (
+							<li key={index}>{item}</li>
+						))}
+					</ol>
+					<h2>Notes:</h2>
+					<ul>
+						{thisRecipe.notes?.split("\n").map((item, index) => (
+							<li key={index}>{item}</li>
+						))}
+					</ul>
+					<br />
+				</div>
+			)}
 		</>
 	);
 }

@@ -10,6 +10,7 @@ import PsnRecipePage from "./PsnRecipePage";
 
 function App() {
 	const [searchResults, setSearchResults] = useState([]);
+	const [fromRandom, setFromRandom] = useState(null);
 
 	return (
 		<>
@@ -29,8 +30,8 @@ function App() {
 
 			<main>
 				<Routes>
-					<Route path='/' element={<HomePage searchResults={searchResults} setSearchResults={setSearchResults} />} />
-					<Route path='/recipe/:recipeId' element={<RecipePage searchResults={searchResults} />} />
+					<Route path='/' element={<HomePage searchResults={searchResults} setSearchResults={setSearchResults} setFromRandom={setFromRandom} />} />
+					<Route path='/recipe/:recipeId' element={<RecipePage searchResults={searchResults} fromRandom={fromRandom} />} />
 					<Route path='/favourites' element={<FavouritesPage />} />
 					<Route path='/new' element={<NewRecipePage />} />
 					<Route path='/personal' element={<PersonalRecipesPage />} />
