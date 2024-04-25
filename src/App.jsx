@@ -15,7 +15,7 @@ function App() {
 	return (
 		<>
 			<nav>
-				<h1>COOK BOOK</h1>
+				<h1>👨🏼‍🍳COOK BOOK👨‍🍳</h1>
 				<Link to='/'>
 					<h1>Home Page</h1>
 				</Link>

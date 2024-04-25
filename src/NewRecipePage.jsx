@@ -36,7 +36,6 @@ export default function NewRecipePage() {
 		);
 	};
 
-	// CREATE AIRTABLE.
 	const addRecipe = async (e) => {
 		e.preventDefault();
 		setLoading(true);
@@ -63,7 +62,7 @@ export default function NewRecipePage() {
 		const response = await fetch(url, options);
 		const res = response.json();
 		console.log(res);
-		setNewRecipe({}); //reset fields
+		setNewRecipe({});
 		setLoading(false);
 	};
 

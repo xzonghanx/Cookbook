@@ -88,10 +88,8 @@ export default function PsnRecipesPage() {
 			},
 			body: JSON.stringify(data),
 		};
-		console.log(JSON.stringify(data));
 		const response = await fetch(url, options);
 		const res = response.json();
-		console.log(res);
 		handleToggle();
 	};
 

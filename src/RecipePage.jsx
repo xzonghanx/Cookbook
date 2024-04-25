@@ -30,12 +30,10 @@ export default function RecipePage({ searchResults, fromRandom }) {
 	}, []);
 
 	const loadRecipeFromState = async () => {
-		console.log("loadRecipeFromState");
 		setRecipe(...searchResults.filter((result) => result.id === parseInt(recipeId)));
 	};
 
 	const loadRecipeFromAPI = async () => {
-		console.log("loadRecipeFromAPI");
 		const url = `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY_spoon}`;
 		const options = {
 			method: "GET",
@@ -102,7 +100,6 @@ export default function RecipePage({ searchResults, fromRandom }) {
 		};
 	}, [favourited, recipeId]);
 
-	//CREATE AIRTABLE.
 	const addFavourite = async () => {
 		const url = "https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%201";
 		const data = {
@@ -126,11 +123,9 @@ export default function RecipePage({ searchResults, fromRandom }) {
 		};
 		const response = await fetch(url, options);
 		const res = response.json();
-		console.log(res);
 		setFavourited(true);
 	};
 
-	//DELETE AIRTABLE. i need Airtable's generated recordID to access just that single record
 	const removeFavourite = async () => {
 		const url = `https://api.airtable.com/v0/appvwwJA2TsFZC1Fi/Table%201/${notesData.recordID}`;
 		const options = {
@@ -142,7 +137,6 @@ export default function RecipePage({ searchResults, fromRandom }) {
 		};
 		const response = await fetch(url, options);
 		const res = response.json();
-		console.log(res);
 		setFavourited(false);
 	};
 

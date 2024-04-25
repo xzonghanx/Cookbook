@@ -24,7 +24,6 @@ export default function FavouritesPage() {
 				const data = await response.json();
 				setFavourites(data.records);
 				setLoading(false);
-				// console.log(data.records);
 			} catch (error) {
 				console.error(error);
 				setLoading(false);
@@ -37,8 +36,8 @@ export default function FavouritesPage() {
 		return (
 			<div key={favourite.fields.id} className='favourites'>
 				<Link to={`/recipe/${favourite.fields.id}`}>
-					<div>Title: {favourite.fields.title}</div>
-					<img src={favourite.fields.image} />
+					<h3>{favourite.fields.title}</h3>
+					<img className='imageDemo' src={favourite.fields.image} />
 				</Link>
 				<div>Times Cooked:{favourite.fields.count ? favourite.fields.count : "Never"}</div>
 				<div>Last Cooked:{favourite.fields.lastCooked ? new Date(favourite.fields.lastCooked).toLocaleDateString("en-SG") : "Never"} </div>

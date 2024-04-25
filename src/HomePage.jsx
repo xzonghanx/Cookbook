@@ -63,8 +63,8 @@ export default function HomePage({ searchResults, setSearchResults, setFromRando
 		return (
 			<div className='results' key={searchResult.id}>
 				<Link to={`/recipe/${searchResult.id}`}>
-					Title: {searchResult?.title}
-					<img src={searchResult?.image} />
+					<div>{searchResult?.title}</div>
+					<img className='imageDemo' src={searchResult?.image} />
 				</Link>
 			</div>
 		);
@@ -77,7 +77,7 @@ export default function HomePage({ searchResults, setSearchResults, setFromRando
 				<Loading />
 			) : (
 				<>
-					<form>
+					<form className='searchbox'>
 						<label>
 							What are you craving? <input type='search' value={search} onChange={handleChange}></input>
 						</label>
@@ -95,10 +95,13 @@ export default function HomePage({ searchResults, setSearchResults, setFromRando
 								<option value='spanish'> Spanish </option>
 								<option value='thai'> Thai </option>
 							</select>
-							<input name='maxReadyTime' type='number' placeholder='Max Prep Time' value={filters.maxReadyTime} onChange={handleFilters}></input>
+							<span>
+								{" "}
+								<input name='maxReadyTime' type='number' placeholder='Max Prep Time' value={filters.maxReadyTime} onChange={handleFilters}></input>
+							</span>
 						</div>
 					</form>
-					<div className='search_container'>{searchResults.length > 0 ? displaySearch : "WE CANT FIND ANYTHING IF YOU ARE BEING SO PICKY"}</div>
+					<div className='search_container'>{searchResults.length > 0 ? displaySearch : <h3>WE CANT FIND ANYTHING IF YOU ARE BEING SO PICKY"</h3>}</div>
 				</>
 			)}
 		</>
