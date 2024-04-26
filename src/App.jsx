@@ -7,6 +7,7 @@ import FavouritesPage from "./FavouritesPage";
 import NewRecipePage from "./NewRecipePage";
 import PersonalRecipesPage from "./PersonalRecipesPage";
 import PsnRecipePage from "./PsnRecipePage";
+// import SearchResultsDisplay from "./SearchResultsDisplay";
 
 function App() {
 	const [searchResults, setSearchResults] = useState([]);
@@ -31,6 +32,7 @@ function App() {
 			<main>
 				<Routes>
 					<Route path='/' element={<HomePage searchResults={searchResults} setSearchResults={setSearchResults} setFromRandom={setFromRandom} />} />
+					{/* <Route path='/:searchQuery' element={<SearchResultsDisplay searchResults={searchResults} />} /> */}
 					<Route path='/recipe/:recipeId' element={<RecipePage searchResults={searchResults} fromRandom={fromRandom} />} />
 					<Route path='/favourites' element={<FavouritesPage />} />
 					<Route path='/new' element={<NewRecipePage />} />

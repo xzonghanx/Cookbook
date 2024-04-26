@@ -29,8 +29,13 @@ export default function RecipePage({ searchResults, fromRandom }) {
 		fetchData();
 	}, []);
 
-	const loadRecipeFromState = async () => {
-		setRecipe(...searchResults.filter((result) => result.id === parseInt(recipeId)));
+	const loadRecipeFromState = () => {
+		const recipeData = searchResults.filter((result) => result.id === parseInt(recipeId));
+		if (recipeData) {
+			setRecipe(...recipeData);
+			setInstructions(recipeData.analyzedInstructions[0].steps);
+			setIngredients(recipeData.extendedIngredients);
+		}
 	};
 
 	const loadRecipeFromAPI = async () => {
@@ -43,33 +48,18 @@ export default function RecipePage({ searchResults, fromRandom }) {
 			const response = await fetch(url, options);
 			const data = await response.json();
 			setRecipe(data);
+			setInstructions(data?.analyzedInstructions[0].steps);
+			setIngredients(data?.extendedIngredients);
 		} catch (error) {
 			console.error(error);
 		}
 	};
-
-	useEffect(() => {
-		try {
-			setInstructions(recipe?.analyzedInstructions[0].steps);
-			setIngredients(recipe?.extendedIngredients);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [recipe]);
 
 	//To enable innerHTML elements within .summary
 	const description = recipe?.summary;
 	function ConvertSummary({ description }) {
 		return <div dangerouslySetInnerHTML={{ __html: description }} />;
 	}
-
-	const mapInstructions = instructions?.map((instruction) => {
-		return <li key={instruction.number}> {instruction.step}</li>;
-	});
-
-	const mapIngredients = ingredients?.map((ingredient) => {
-		return <li key={ingredient.id}> {ingredient.original}</li>;
-	});
 
 	useEffect(() => {
 		let active = true;
@@ -156,9 +146,19 @@ export default function RecipePage({ searchResults, fromRandom }) {
 					<h2>Recipe Summary:</h2> <ConvertSummary description={description} />
 					<br />
 					<h2>Ingredients:</h2>
-					<ul> {mapIngredients}</ul>
+					<ul>
+						{" "}
+						{ingredients?.map((ingredient) => {
+							return <li key={ingredient.id}> {ingredient.original}</li>;
+						})}
+					</ul>
 					<h2>Instructions:</h2>
-					<ol> {mapInstructions}</ol>
+					<ol>
+						{" "}
+						{instructions?.map((instruction) => {
+							return <li key={instruction.number}> {instruction.step}</li>;
+						})}
+					</ol>
 					<div>{favourited ? <button onClick={removeFavourite}>Remove from Favourites</button> : <button onClick={addFavourite}>Add to Favourites</button>}</div>
 					<div className='notes_container'>{favourited ? <Notes notesData={notesData} setNotesData={setNotesData} /> : null}</div>
 				</div>
