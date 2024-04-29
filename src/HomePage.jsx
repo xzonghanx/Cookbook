@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import SearchResultsDisplay from "./SearchResultsDisplay";
 
@@ -63,17 +63,6 @@ export default function HomePage({ searchResults, setSearchResults, setFromRando
 		setLoading(false);
 	};
 
-	// const displaySearch = searchResults?.map((searchResult) => {
-	// 	return (
-	// 		<div className='results' key={searchResult.id}>
-	// 			<Link to={`/recipe/${searchResult.id}`}>
-	// 				<div>{searchResult?.title}</div>
-	// 				<img className='imageDemo' src={searchResult?.image} />
-	// 			</Link>
-	// 		</div>
-	// 	);
-	// });
-
 	return (
 		<>
 			<h1>Whats for Dinner?</h1>
@@ -106,7 +95,6 @@ export default function HomePage({ searchResults, setSearchResults, setFromRando
 						</div>
 					</form>
 					<SearchResultsDisplay searchResults={searchResults} />
-					{/* <div className='search_container'>{searchResults.length > 0 ? displaySearch : <h3>WE CANT FIND ANYTHING IF YOU ARE BEING SO PICKY"</h3>}</div> */}
 				</>
 			)}
 		</>
